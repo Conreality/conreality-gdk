@@ -12,7 +12,11 @@ import (
 
 // Thread
 type Thread struct {
-	state *lua.State
+	state   *lua.State
+	Self    *gdk.Agent
+	Unit    *gdk.Unit
+	Theater *gdk.Theater
+	Game    *gdk.Game
 }
 
 // NewThread
@@ -22,7 +26,12 @@ func NewThread() (*Thread, error) {
 		lua.WithVerbose(false),
 		lua.WithChecks(true),
 	}
+
 	thread := &Thread{state: lua.NewState(opts...)}
+	thread.Self = &gdk.Agent{}
+	thread.Unit = &gdk.Unit{}
+	thread.Theater = &gdk.Theater{}
+	thread.Game = &gdk.Game{}
 
 	std.Open(thread.state)
 	thread.state.Push(true)
@@ -41,16 +50,11 @@ func NewThread() (*Thread, error) {
 		thread.state.Pop()
 	}
 
-	self := gdk.Agent{}
-	thread.state.Push(&self)                    // []          => [self] <-TOS
-	thread.state.PushIndex(-1)                  // [self]      => [self self]
-	thread.state.SetGlobal("self")              // [self self] => [self]
-	thread.state.NewMetaTable("Agent")          // [self] => [self mt]
-	thread.state.PushIndex(-1)                  // [self mt] => [self mt mt]
-	thread.state.SetField(-2, "__index")        // [self mt mt] => [self mt] // metatable.__index = metatable
-	thread.state.SetFuncs(gdkAgentMethods(), 0) // ...
-	thread.state.SetMetaTableAt(-2)             // [self mt] => [self]
-	thread.state.Pop()                          // [self] => []
+	gdkRegisterGlobal(thread.state, "self", thread.Self, "Agent", gdkAgentMethods())
+	gdkRegisterGlobal(thread.state, "unit", thread.Unit, "Unit", gdkUnitMethods())
+	gdkRegisterGlobal(thread.state, "theater", thread.Theater, "Theater", gdkTheaterMethods())
+	gdkRegisterGlobal(thread.state, "game", thread.Game, "Game", gdkGameMethods())
+	// TODO: here, now, targets
 
 	err := thread.state.ExecText(gdk.Prelude)
 	if err != nil {
