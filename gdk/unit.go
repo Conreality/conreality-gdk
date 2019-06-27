@@ -16,12 +16,12 @@ func UnitPredicates() map[string]UnitPredicate {
 	}
 }
 
-// IsPlayer
+// IsAlive
 func (unit *Unit) IsAlive() bool {
 	return true // TODO
 }
 
-// IsRobot
+// IsDead
 func (unit *Unit) IsDead() bool {
 	return !unit.IsAlive()
 }
