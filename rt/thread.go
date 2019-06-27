@@ -16,7 +16,7 @@ type Thread struct {
 }
 
 // NewThread
-func NewThread() *Thread {
+func NewThread() (*Thread, error) {
 	var opts = []lua.Option{
 		lua.WithTrace(false),
 		lua.WithVerbose(false),
@@ -52,7 +52,17 @@ func NewThread() *Thread {
 	thread.state.SetMetaTableAt(-2)             // [self mt] => [self]
 	thread.state.Pop()                          // [self] => []
 
-	return thread
+	err := thread.state.ExecText(gdk.Prelude)
+	if err != nil {
+		return nil, err
+	}
+
+	return thread, nil
+}
+
+// Destroy
+func (thread *Thread) Destroy() {
+	thread.state.Close()
 }
 
 // DumpStack
@@ -63,4 +73,9 @@ func (thread *Thread) DumpStack() {
 // EvalFile
 func (thread *Thread) EvalFile(filePath string) error {
 	return thread.state.ExecFile(filePath)
+}
+
+// EvalScript
+func (thread *Thread) EvalScript(script string) error {
+	return thread.state.ExecText(script)
 }
