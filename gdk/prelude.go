@@ -5,4 +5,5 @@ package gdk
 // Prelude
 const Prelude = `
 printf = function(fmt, ...) print(fmt:format(...)) end
+sprintf = function(fmt, ...) fmt:format(...) end
 `
