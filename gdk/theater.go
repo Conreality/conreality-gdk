@@ -3,7 +3,12 @@
 package gdk
 
 // Theater
-type Theater struct{}
+type Theater interface{}
 
 // TheaterPredicate
-type TheaterPredicate func(*Theater) bool
+type TheaterPredicate func(Theater) bool
+
+// TheaterPredicates
+func TheaterPredicates() map[string]TheaterPredicate {
+	return map[string]TheaterPredicate{}
+}

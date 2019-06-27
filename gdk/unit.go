@@ -3,25 +3,22 @@
 package gdk
 
 // Unit
-type Unit struct{}
+type Unit interface {
+	IsAlive() bool
+	IsDead() bool
+}
 
 // UnitPredicate
-type UnitPredicate func(*Unit) bool
+type UnitPredicate func(Unit) bool
 
 // UnitPredicates
 func UnitPredicates() map[string]UnitPredicate {
 	return map[string]UnitPredicate{
-		"is_alive": (*Unit).IsAlive,
-		"is_dead":  (*Unit).IsDead,
+		"is_alive": func(unit Unit) bool {
+			return unit.IsAlive()
+		},
+		"is_dead": func(unit Unit) bool {
+			return unit.IsDead()
+		},
 	}
-}
-
-// IsAlive
-func (unit *Unit) IsAlive() bool {
-	return true // TODO
-}
-
-// IsDead
-func (unit *Unit) IsDead() bool {
-	return !unit.IsAlive()
 }

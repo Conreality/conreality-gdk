@@ -3,9 +3,12 @@
 package gdk
 
 // Target
-type Target struct {
-	Object Object
-}
+type Target interface{}
 
 // TargetPredicate
-type TargetPredicate func(*Target) bool
+type TargetPredicate func(Target) bool
+
+// TargetPredicates
+func TargetPredicates() map[string]TargetPredicate {
+	return map[string]TargetPredicate{}
+}

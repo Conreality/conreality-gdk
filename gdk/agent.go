@@ -3,57 +3,55 @@
 package gdk
 
 // Agent
-type Agent struct {
-	Object Object
+type Agent interface {
+	IsPlayer() bool
+	IsRobot() bool
+	CanFly() bool
+	CanMove() bool
+	HasLegs() bool
+	HasWings() bool
+	HasWheels() bool
+	Name() string
 }
 
 // AgentPredicate
-type AgentPredicate func(*Agent) bool
+type AgentPredicate func(Agent) bool
+
+// AgentProperty
+type AgentProperty func(Agent) interface{}
 
 // AgentPredicates
 func AgentPredicates() map[string]AgentPredicate {
 	return map[string]AgentPredicate{
-		"is_player":  (*Agent).IsPlayer,
-		"is_robot":   (*Agent).IsRobot,
-		"can_fly":    (*Agent).CanFly,
-		"can_move":   (*Agent).CanMove,
-		"has_legs":   (*Agent).HasLegs,
-		"has_wings":  (*Agent).HasWings,
-		"has_wheels": (*Agent).HasWheels,
+		"is_player": func(agent Agent) bool {
+			return agent.IsPlayer()
+		},
+		"is_robot": func(agent Agent) bool {
+			return agent.IsRobot()
+		},
+		"can_fly": func(agent Agent) bool {
+			return agent.CanFly()
+		},
+		"can_move": func(agent Agent) bool {
+			return agent.CanMove()
+		},
+		"has_legs": func(agent Agent) bool {
+			return agent.HasLegs()
+		},
+		"has_wings": func(agent Agent) bool {
+			return agent.HasWings()
+		},
+		"has_wheels": func(agent Agent) bool {
+			return agent.HasWheels()
+		},
 	}
 }
 
-// IsPlayer
-func (agent *Agent) IsPlayer() bool {
-	return false // TODO
-}
-
-// IsRobot
-func (agent *Agent) IsRobot() bool {
-	return false // TODO
-}
-
-// CanFly
-func (agent *Agent) CanFly() bool {
-	return false // TODO
-}
-
-// CanMove
-func (agent *Agent) CanMove() bool {
-	return false // TODO
-}
-
-// HasLegs
-func (agent *Agent) HasLegs() bool {
-	return false // TODO
-}
-
-// HasWings
-func (agent *Agent) HasWings() bool {
-	return false // TODO
-}
-
-// HasWheels
-func (agent *Agent) HasWheels() bool {
-	return false // TODO
+// AgentProperties
+func AgentProperties() map[string]AgentProperty {
+	return map[string]AgentProperty{
+		"name": func(agent Agent) interface{} {
+			return agent.Name()
+		},
+	}
 }

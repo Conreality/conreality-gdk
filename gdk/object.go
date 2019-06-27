@@ -3,7 +3,12 @@
 package gdk
 
 // Object
-type Object struct{}
+type Object interface{}
 
 // ObjectPredicate
-type ObjectPredicate func(*Object) bool
+type ObjectPredicate func(Object) bool
+
+// ObjectPredicates
+func ObjectPredicates() map[string]ObjectPredicate {
+	return map[string]ObjectPredicate{}
+}

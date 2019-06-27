@@ -27,7 +27,7 @@ func gdkAgentMethods() map[string]lua.Func {
 	result := make(map[string]lua.Func)
 	for id, fn := range gdk.AgentPredicates() {
 		result[id] = func(state *lua.State) int {
-			obj := state.CheckUserData(1, "Agent").(*gdk.Agent)
+			obj := state.CheckUserData(1, "Agent").(gdk.Agent)
 			state.Push(fn(obj))
 			return 1 // [] => [result]
 		}
@@ -39,7 +39,7 @@ func gdkGameMethods() map[string]lua.Func {
 	result := make(map[string]lua.Func)
 	for id, fn := range gdk.GamePredicates() {
 		result[id] = func(state *lua.State) int {
-			obj := state.CheckUserData(1, "Game").(*gdk.Game)
+			obj := state.CheckUserData(1, "Game").(gdk.Game)
 			state.Push(fn(obj))
 			return 1 // [] => [result]
 		}
@@ -57,7 +57,7 @@ func gdkUnitMethods() map[string]lua.Func {
 	result := make(map[string]lua.Func)
 	for id, fn := range gdk.UnitPredicates() {
 		result[id] = func(state *lua.State) int {
-			obj := state.CheckUserData(1, "Unit").(*gdk.Unit)
+			obj := state.CheckUserData(1, "Unit").(gdk.Unit)
 			state.Push(fn(obj))
 			return 1 // [] => [result]
 		}

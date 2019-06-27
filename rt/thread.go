@@ -12,26 +12,19 @@ import (
 
 // Thread
 type Thread struct {
-	state   *lua.State
-	Self    *gdk.Agent
-	Unit    *gdk.Unit
-	Theater *gdk.Theater
-	Game    *gdk.Game
+	Model *Model
+	state *lua.State
 }
 
 // NewThread
-func NewThread() (*Thread, error) {
+func NewThread(model *Model) (*Thread, error) {
 	var opts = []lua.Option{
 		lua.WithTrace(false),
 		lua.WithVerbose(false),
 		lua.WithChecks(true),
 	}
 
-	thread := &Thread{state: lua.NewState(opts...)}
-	thread.Self = &gdk.Agent{}
-	thread.Unit = &gdk.Unit{}
-	thread.Theater = &gdk.Theater{}
-	thread.Game = &gdk.Game{}
+	thread := &Thread{Model: model, state: lua.NewState(opts...)}
 
 	std.Open(thread.state)
 	thread.state.Push(true)
@@ -50,10 +43,10 @@ func NewThread() (*Thread, error) {
 		thread.state.Pop()
 	}
 
-	gdkRegisterGlobal(thread.state, "self", thread.Self, "Agent", gdkAgentMethods())
-	gdkRegisterGlobal(thread.state, "unit", thread.Unit, "Unit", gdkUnitMethods())
-	gdkRegisterGlobal(thread.state, "theater", thread.Theater, "Theater", gdkTheaterMethods())
-	gdkRegisterGlobal(thread.state, "game", thread.Game, "Game", gdkGameMethods())
+	gdkRegisterGlobal(thread.state, "self", thread.Model.Self, "Agent", gdkAgentMethods())
+	gdkRegisterGlobal(thread.state, "unit", thread.Model.Unit, "Unit", gdkUnitMethods())
+	gdkRegisterGlobal(thread.state, "theater", thread.Model.Theater, "Theater", gdkTheaterMethods())
+	gdkRegisterGlobal(thread.state, "game", thread.Model.Game, "Game", gdkGameMethods())
 	// TODO: here, now, targets
 
 	err := thread.state.ExecText(gdk.Prelude)

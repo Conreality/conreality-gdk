@@ -3,27 +3,22 @@
 package gdk
 
 // Player
-type Player struct {
-	Agent Agent
+type Player interface {
+	IsAlive() bool
+	IsDead() bool
 }
 
 // PlayerPredicate
-type PlayerPredicate func(*Player) bool
+type PlayerPredicate func(Player) bool
 
 // PlayerPredicates
 func PlayerPredicates() map[string]PlayerPredicate {
 	return map[string]PlayerPredicate{
-		"is_alive": (*Player).IsAlive,
-		"is_dead":  (*Player).IsDead,
+		"is_alive": func(player Player) bool {
+			return player.IsAlive()
+		},
+		"is_dead": func(player Player) bool {
+			return player.IsDead()
+		},
 	}
-}
-
-// IsAlive
-func (player *Player) IsAlive() bool {
-	return true // TODO
-}
-
-// IsDead
-func (player *Player) IsDead() bool {
-	return !player.IsAlive()
 }
