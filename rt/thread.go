@@ -3,6 +3,7 @@
 package rt
 
 import (
+	"bytes"
 	"os"
 
 	"github.com/Azure/golua/lua"
@@ -67,12 +68,17 @@ func (thread *Thread) DumpStack() {
 	thread.state.DumpStack(os.Stderr)
 }
 
-// EvalFile
-func (thread *Thread) EvalFile(filePath string) error {
-	return thread.state.ExecFile(filePath)
+// EvalChunk
+func (thread *Thread) EvalChunk(chunk []byte) error {
+	return thread.state.ExecFrom(bytes.NewReader(chunk))
 }
 
 // EvalScript
 func (thread *Thread) EvalScript(script string) error {
 	return thread.state.ExecText(script)
+}
+
+// EvalFile
+func (thread *Thread) EvalFile(filePath string) error {
+	return thread.state.ExecFile(filePath)
 }
