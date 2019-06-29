@@ -9,6 +9,7 @@ import (
 	"github.com/Azure/golua/lua"
 	"github.com/Azure/golua/std"
 	"github.com/conreality/conreality-gdk/gdk"
+	"github.com/pkg/errors"
 )
 
 // Thread
@@ -84,4 +85,29 @@ func (thread *Thread) EvalScript(script string) error {
 // EvalFile
 func (thread *Thread) EvalFile(filePath string) error {
 	return thread.state.ExecFile(filePath)
+}
+
+// HasFunction
+func (thread *Thread) HasFunction(name string) bool {
+	kind := thread.state.GetGlobal(name)
+	thread.state.Pop()
+	return kind == lua.FuncType
+}
+
+// CallFunction
+func (thread *Thread) CallFunction(name string, args ...interface{}) error {
+	kind := thread.state.GetGlobal(name)
+	if kind == lua.NoneType {
+		thread.state.Pop()
+		return errors.Errorf("unknown function: %s", name)
+	}
+	if kind != lua.FuncType {
+		thread.state.Pop()
+		return errors.Errorf("invalid function: %s", name)
+	}
+	for _, arg := range args {
+		thread.state.Push(arg)
+	}
+	thread.state.Call(len(args), 0)
+	return nil
 }

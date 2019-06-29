@@ -1,2 +1,4 @@
 github.com/Azure/golua v0.0.0-20190201163710-5105380e8196 h1:MsDn6eUTEWKjZXDV1oz0NLuj8ikiBnjVhq08MFzaiEI=
 github.com/Azure/golua v0.0.0-20190201163710-5105380e8196/go.mod h1:Qtqr8Y+5vWnmz/4RWerkYOJfugBu9ViPCFC8yvvFL5I=
+github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
+github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
