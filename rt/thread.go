@@ -5,8 +5,10 @@ package rt
 import (
 	"bytes"
 	"os"
+	"reflect"
 
 	"github.com/Azure/golua/lua"
+	"github.com/Azure/golua/pkg/luautil"
 	"github.com/Azure/golua/std"
 	"github.com/conreality/conreality-gdk/gdk"
 	"github.com/pkg/errors"
@@ -106,7 +108,12 @@ func (thread *Thread) CallFunction(name string, args ...interface{}) error {
 		return errors.Errorf("invalid function: %s", name)
 	}
 	for _, arg := range args {
-		thread.state.Push(arg)
+		switch rv := reflect.ValueOf(arg); rv.Kind() {
+		case reflect.Map:
+			luautil.ValueOf(thread.state, arg)
+		default:
+			thread.state.Push(arg)
+		}
 	}
 	thread.state.Call(len(args), 0)
 	return nil
