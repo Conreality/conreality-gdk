@@ -69,7 +69,10 @@ func gdkHeadsetMethods() map[string]lua.Func {
 	result := make(map[string]lua.Func)
 	result["speak"] = func(state *lua.State) int {
 		obj := state.CheckUserData(1, "Headset").(gdk.Headset)
-		obj.Speak("Testing") // FIXME
+		msg := state.CheckString(2)
+		if msg != "" {
+			obj.Speak(msg)
+		}
 		return 0
 	}
 	return result
