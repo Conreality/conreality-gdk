@@ -48,6 +48,7 @@ func NewThread(model *Model, usePrelude bool) (*Thread, error) {
 	gdkRegisterGlobal(thread.state, "unit", thread.Model.Unit, "Unit", gdkUnitMethods())
 	gdkRegisterGlobal(thread.state, "theater", thread.Model.Theater, "Theater", gdkTheaterMethods())
 	gdkRegisterGlobal(thread.state, "game", thread.Model.Game, "Game", gdkGameMethods())
+	gdkRegisterGlobal(thread.state, "headset", thread.Model.Headset, "Headset", gdkHeadsetMethods())
 	// TODO: here, now, targets
 
 	if usePrelude {

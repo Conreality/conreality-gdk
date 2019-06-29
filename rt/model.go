@@ -10,4 +10,5 @@ type Model struct {
 	Unit    gdk.Unit
 	Theater gdk.Theater
 	Game    gdk.Game
+	Headset gdk.Headset
 }

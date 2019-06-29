@@ -65,6 +65,16 @@ func gdkUnitMethods() map[string]lua.Func {
 	return result
 }
 
+func gdkHeadsetMethods() map[string]lua.Func {
+	result := make(map[string]lua.Func)
+	result["speak"] = func(state *lua.State) int {
+		obj := state.CheckUserData(1, "Headset").(gdk.Headset)
+		obj.Speak("Testing") // FIXME
+		return 0
+	}
+	return result
+}
+
 func gdkRegisterGlobal(state *lua.State, globalVar string, globalVal interface{}, metatableID string, metatableFuncs map[string]lua.Func) {
 	state.Push(globalVal)             // []          => [val] <-TOS
 	state.PushIndex(-1)               // [val]       => [val val]
