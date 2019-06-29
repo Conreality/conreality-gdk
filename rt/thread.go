@@ -18,7 +18,7 @@ type Thread struct {
 }
 
 // NewThread
-func NewThread(model *Model) (*Thread, error) {
+func NewThread(model *Model, usePrelude bool) (*Thread, error) {
 	var opts = []lua.Option{
 		lua.WithTrace(false),
 		lua.WithVerbose(false),
@@ -50,9 +50,11 @@ func NewThread(model *Model) (*Thread, error) {
 	gdkRegisterGlobal(thread.state, "game", thread.Model.Game, "Game", gdkGameMethods())
 	// TODO: here, now, targets
 
-	err := thread.state.ExecText(gdk.Prelude)
-	if err != nil {
-		return nil, err
+	if usePrelude {
+		err := thread.state.ExecText(gdk.Prelude)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return thread, nil
